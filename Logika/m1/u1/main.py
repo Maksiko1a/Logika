@@ -2,29 +2,18 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout
 from random import randint
 
-app = QApplication([])
+app = QApplication([]) #Створюємо додаток
+main_wind = QWidget()
+main_wind.resize(400,200)
+main_wind.move(200,200)
 
-main_win = QWidget()
-main_win.setWindowTitle('Визначник переможця')
-main_win.move(900, 70)
-main_win.resize(400, 200)
-
-button = QPushButton('Згенерувати')
-text = QLabel('Натисніть, щоб визначити переможця')
-winner = QLabel('?')
+btn1 = QPushButton("Згенерувати") #створюємо кнопку
+text = QLabel("Переможець")
 
 line = QVBoxLayout()
-line.addWidget(text, alignment=Qt.AlignCenter)
-line.addWidget(winner, alignment=Qt.AlignCenter)
-line.addWidget(button, alignment=Qt.AlignCenter)
-main_win.setLayout(line)
+line.addWidget(btn1, alignment = Qt.AlignCenter)
+line.addWidget(text, alignment = Qt.AlignCenter)
 
-def show_winner():
-    number = randint(0, 99)
-    winner.setText(str(number))
-    text.setText('Переможець:')
-
-button.clicked.connect(show_winner)
-
-main_win.show()
+main_wind.setLayout(line)
+main_wind.show()
 app.exec_()
