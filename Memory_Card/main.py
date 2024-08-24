@@ -1,3 +1,31 @@
+from menu_window import*
+from main_window import* 
+
+
+from random import choice
+
+
+class Question():
+    def __init__(self, question, answer, wrong_answer1, wrong_answer2, wrong_answer3):
+        self.question = question
+        self.answer = answer
+        self.wrong_answer1 = wrong_answer1
+        self.wrong_answer2 = wrong_answer2
+        self.wrong_answer3 = wrong_answer3
+
+        self.actual = True
+        self.attempts = 0 
+        self.correct = 0
+    
+    def got_right(self):
+        
+        self.attempts += 1
+        self.correct += 1
+
+    def got_wrong(self):
+        self.attempts += 1
+        
+
 #========================================================================================================
 #Питання
 #========================================================================================================
@@ -36,3 +64,7 @@ q15 = Question('Який скандинавський бог є богом ві�
     #A) Одін
     #B) Артеміда
     #A) Одін
+
+#список з перемакачів кнопок та питань
+radio_list = [rbtn_1, rbtn_2, rbtn_3, rbtn_4]
+Questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15]
