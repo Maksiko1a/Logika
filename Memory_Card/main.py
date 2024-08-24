@@ -95,7 +95,7 @@ def new_question():
 
 
 
-def check_result
+
 
 
 
@@ -125,7 +125,19 @@ def clear():
     txt_Wrong2.clear()
     txt_Wrong3.clear()
 
+
+
+#підключення до кнопок
+
+btn_Menu.clicked.connect(show_menu)
+btn_back.clicked.connect(show_menu)
+btn_clear.clicked.connect(show_menu)
+btn_Sleep.clicked.connect(show_menu)
+btn_OK.clicked.connect(show_menu)
+btn_add_q.clicked.connect(show_menu)
+
 main_win.show()
 app.exec_()
+
 
 
