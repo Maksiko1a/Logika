@@ -130,14 +130,17 @@ def clear():
 #підключення до кнопок
 
 btn_Menu.clicked.connect(show_menu)
-btn_back.clicked.connect(show_menu)
-btn_clear.clicked.connect(show_menu)
-btn_Sleep.clicked.connect(show_menu)
-btn_OK.clicked.connect(show_menu)
-btn_add_q.clicked.connect(show_menu)
+btn_back.clicked.connect(back_menu)
+btn_clear.clicked.connect(clear)
+btn_Sleep.clicked.connect(rest)
+btn_OK.clicked.connect(switch_screen)
+btn_add_q.clicked.connect(add_question)
 
 main_win.show()
 app.exec_()
+
+
+
 
 
 
