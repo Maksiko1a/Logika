@@ -359,5 +359,184 @@ setTimeout(()=>{ openPage('extraContent'); setTimeout(()=>{ openPage('home'); },
 
 </script>
 
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+    
+  /* --- ДИЗАЙН --- */
+
+  /* Оновлення шрифту для всього сайту */
+  body, button, input {
+    font-family: 'Montserrat', sans-serif !important;
+  }
+
+  /* Живий фон (рухомі градієнтні плями) */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background:
+      radial-gradient(circle at 20% 30%, var(--accent-light), transparent 40%),
+      radial-gradient(circle at 80% 70%, var(--accent-light), transparent 40%);
+    opacity: 0.15; /* Дуже легкий ефект */
+    z-index: -1;
+    animation: bgMove 20s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  /* Створюємо світлішу версію акцентного кольору для фону */
+  :root { --accent-light: #2ecc71; }
+  .dark { --accent-light: #6aff9b; }
+
+  @keyframes bgMove {
+    0% { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.2) translate(-20px, 20px); }
+  }
+
+  /* Кастомний скролбар */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 5px; border: 2px solid var(--bg); }
+
+  /* Покращення карток (більш виражений скляний ефект) */
+  .card {
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  .dark .card {
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+
+  /* --- ФІШКИ --- */
+
+  /* Стилі для анімації появи при скролі (Scroll Reveal) */
+  .card.scroll-hidden {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .card.scroll-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Кнопка "Наверх" */
+  #backToTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px; height: 50px;
+    background: var(--accent);
+    color: #000;
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0; visibility: hidden;
+    transition: 0.3s;
+    z-index: 999;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  #backToTop.show-btn { opacity: 1; visibility: visible; }
+  #backToTop:hover { transform: translateY(-5px); }
+
+  /* Стиль для нової інтерактивної картки */
+  .challenge-card { background: linear-gradient(135deg, var(--card), var(--accent-light) 150%); }
+</style>
+
+<div id="backToTop" onclick="scrollToTop()">↑</div>
+
+
+
+<script>
+  // --- ФУНКЦІОНАЛ (JS) ---
+
+  // 1. Анімація появи карток при скролі (Intersection Observer)
+  document.addEventListener("DOMContentLoaded", () => {
+    // Знаходимо всі картки та додаємо початковий клас "приховано"
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => card.classList.add('scroll-hidden'));
+
+    // Налаштування спостерігача
+    const observerOptions = {
+      threshold: 0.15 // Картка з'явиться, коли 15% її видно на екрані
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('scroll-visible');
+          entry.target.classList.remove('scroll-hidden');
+          // Припиняємо спостереження після появи, щоб анімація була одноразовою
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    cards.forEach(card => observer.observe(card));
+  });
+
+
+  // 2. Логіка кнопки "Наверх"
+  const backToTopBtn = document.getElementById("backToTop");
+
+  window.onscroll = function() {
+    // Показуємо кнопку, якщо проскролили більше 300px
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+      backToTopBtn.classList.add("show-btn");
+    } else {
+      backToTopBtn.classList.remove("show-btn");
+    }
+  };
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+
+  // 3. Інтерактивна фішка: Додавання "Еко-виклику дня" на головну
+  // Ми програмно створимо нову картку і вставимо її в розділ #home
+
+  const challenges = [
+    "Сьогодні відмовся від пластикового пакету в магазині.",
+    "Випий каву у власній термочашці замість одноразового стаканчика.",
+    "Перевір свої запаси круп перед походом в магазин, щоб не купити зайвого.",
+    "Спробуй прийняти душ на 2 хвилини швидше, щоб зекономити воду.",
+    "Знайди найближчий пункт прийому батарейок на карті."
+  ];
+
+  function injectDailyChallenge() {
+    const homeSection = document.getElementById('home');
+    // Перевіряємо, чи існує розділ home
+    if (!homeSection) return;
+
+    // Беремо випадковий виклик
+    const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+
+    // Створюємо HTML нової картки
+    const challengeHTML = `
+      <div class="card challenge-card scroll-hidden" style="border-left: 5px solid var(--accent);">
+        <h3 style="margin-top:0;">🌟 Ваш еко-виклик на сьогодні:</h3>
+        <p style="font-size: 1.2em; font-weight: 600;">"${randomChallenge}"</p>
+        <p style="opacity: 0.8; font-size: 0.9em;">Маленькі кроки ведуть до великих змін!</p>
+      </div>
+    `;
+
+    // Вставляємо картку після головного заголовка (після першої .card в #home)
+    const firstCard = homeSection.querySelector('.card');
+    if (firstCard) {
+      firstCard.insertAdjacentHTML('afterend', challengeHTML);
+    }
+  }
+
+  // Запускаємо функцію додавання виклику після завантаження сторінки
+  injectDailyChallenge();
+
+</script>
+
 </body>
 </html>
+
+
